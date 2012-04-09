@@ -26,7 +26,7 @@ SSL_CONN::SSL_CONN(tcp::socket *_socket, enum role _role) {
 	SSL_load_error_strings();
 	SSL_library_init();
 
-	SSL_METHOD *meth 	= (role==CLIENT)? TLSv1_client_method() : TLSv1_server_method();
+    const SSL_METHOD *meth 	= (role==CLIENT)? TLSv1_client_method() : TLSv1_server_method();
 	ctx 				= SSL_CTX_new(meth);
 	conn 				= SSL_new(ctx);
 	bioIn 				= BIO_new(BIO_s_mem());
