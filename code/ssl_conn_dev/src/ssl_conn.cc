@@ -28,11 +28,6 @@ SSL_CONN::SSL_CONN(tcp::socket *_socket, enum role _role) {
 
     const SSL_METHOD *meth 	= (role==CLIENT)? TLSv1_client_method() : TLSv1_server_method();
 	ctx 				= SSL_CTX_new(meth);
-	conn 				= SSL_new(ctx);
-	bioIn 				= BIO_new(BIO_s_mem());
-	bioOut 				= BIO_new(BIO_s_mem());
-	bio_err 			= BIO_new_fp(stderr, BIO_NOCLOSE);
-	SSL_set_bio(conn,bioIn,bioOut); // connect the ssl-object to the bios
 
 	char password[] = "test";
 	SSL_CTX_set_default_passwd_cb(ctx, &pem_passwd_cb); //passphrase for both the same
@@ -57,6 +52,12 @@ SSL_CONN::SSL_CONN(tcp::socket *_socket, enum role _role) {
 		if (SSL_DEBUG) cout << str_role << ": dooong. wow" << endl;
 		print_err();
 	}
+
+    conn 				= SSL_new(ctx);
+	bioIn 				= BIO_new(BIO_s_mem());
+	bioOut 				= BIO_new(BIO_s_mem());
+	bio_err 			= BIO_new_fp(stderr, BIO_NOCLOSE);
+	SSL_set_bio(conn,bioIn,bioOut); // connect the ssl-object to the bios
 }
 
 SSL_CONN::~SSL_CONN() {
